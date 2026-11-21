@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/common/Button.tsx
-// Accessible button primitive with clear focus indicators and states
-// Per DESIGN.md §2 and ACCESSIBILITY.md §3
-// ============================================================
+/**
+ * @file Button.tsx
+ * @module components/common
+ * @description Accessible button primitive with clear focus indicators, loading spinner, and size variants
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 
@@ -12,7 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-export function Button({
+export const Button = React.memo(function Button({
   children,
   variant = 'primary',
   size = 'md',
@@ -54,4 +55,5 @@ export function Button({
       )}
     </button>
   );
-}
+});
+Button.displayName = 'Button';

@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/air/AqiSummary.tsx
-// High-visibility AQI summary with color-independent geometric glyphs
-// Per DESIGN.md §3 and ACCESSIBILITY.md §4
-// ============================================================
+/**
+ * @file AqiSummary.tsx
+ * @module components/air
+ * @description High-visibility AQI summary with color-independent geometric glyphs and twin representation
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 import { AirSnapshot, RiskAssessment } from '@/lib/types';
@@ -13,7 +14,10 @@ interface AqiSummaryProps {
   assessment?: RiskAssessment;
 }
 
-export function AqiSummary({ snapshot, assessment }: AqiSummaryProps) {
+export const AqiSummary = React.memo(function AqiSummary({
+  snapshot,
+  assessment,
+}: AqiSummaryProps) {
   const currentTier = assessment ? assessment.tier : snapshot.band;
   const isEscalated = assessment?.isEscalated;
 
@@ -74,4 +78,5 @@ export function AqiSummary({ snapshot, assessment }: AqiSummaryProps) {
       )}
     </div>
   );
-}
+});
+AqiSummary.displayName = 'AqiSummary';

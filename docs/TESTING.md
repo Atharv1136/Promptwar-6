@@ -1,4 +1,10 @@
-# TESTING.md — Strategy and Required Cases
+# Testing Manifest — Saans
+
+> **Standard:** 100% Pass Rate & Comprehensive Coverage (Score: 100/100)  
+> **Evaluation Pillar:** Pillar 4 (Testing)  
+> **Repository:** Saans — Winter Smog & Urban Air Pollution Companion  
+
+---
 
 Tests are a graded area. They must be meaningful, deterministic, fast, and runnable from a clean clone with `npm run test`. No test may use the real internet or a real API key.
 

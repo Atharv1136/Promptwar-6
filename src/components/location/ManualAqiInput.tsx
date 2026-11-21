@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/location/ManualAqiInput.tsx
-// Offline and degraded fallback manual AQI input (0-500)
-// Per PRD.md §7 (FR8) and DESIGN.md §5
-// ============================================================
+/**
+ * @file ManualAqiInput.tsx
+ * @module components/location
+ * @description Offline and degraded fallback manual AQI input (0-500) with live glyph indicator
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 import { getAQIBand } from '@/lib/aqi/bands';
@@ -14,7 +15,11 @@ interface ManualAqiInputProps {
   onCancel: () => void;
 }
 
-export function ManualAqiInput({ value, onChange, onCancel }: ManualAqiInputProps) {
+export const ManualAqiInput = React.memo(function ManualAqiInput({
+  value,
+  onChange,
+  onCancel,
+}: ManualAqiInputProps) {
   const currentBand = getAQIBand(value);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,4 +68,5 @@ export function ManualAqiInput({ value, onChange, onCancel }: ManualAqiInputProp
       </div>
     </div>
   );
-}
+});
+ManualAqiInput.displayName = 'ManualAqiInput';

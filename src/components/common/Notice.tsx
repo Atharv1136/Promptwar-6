@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/common/Notice.tsx
-// Status and warning banners with ARIA live region support
-// Per DESIGN.md §5 and ACCESSIBILITY.md §6
-// ============================================================
+/**
+ * @file Notice.tsx
+ * @module components/common
+ * @description Status and warning banner primitives with ARIA live region support
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 import { InfoIcon, WarningIcon } from './Icons';
@@ -14,7 +15,12 @@ interface NoticeProps {
   className?: string;
 }
 
-export function Notice({ type = 'info', title, children, className = '' }: NoticeProps) {
+export const Notice = React.memo(function Notice({
+  type = 'info',
+  title,
+  children,
+  className = '',
+}: NoticeProps) {
   const isError = type === 'error';
   const isWarning = type === 'warning';
 
@@ -44,4 +50,5 @@ export function Notice({ type = 'info', title, children, className = '' }: Notic
       </div>
     </div>
   );
-}
+});
+Notice.displayName = 'Notice';

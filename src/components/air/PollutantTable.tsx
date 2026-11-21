@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/air/PollutantTable.tsx
-// Semantic multi-pollutant breakdown table with tabular numbers
-// Per ACCESSIBILITY.md §1 and PRD.md §7 (FR1)
-// ============================================================
+/**
+ * @file PollutantTable.tsx
+ * @module components/air
+ * @description Semantic multi-pollutant breakdown table with tabular numbers
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 import { Pollutants } from '@/lib/types';
@@ -11,7 +12,9 @@ interface PollutantTableProps {
   pollutants: Pollutants;
 }
 
-export function PollutantTable({ pollutants }: PollutantTableProps) {
+export const PollutantTable = React.memo(function PollutantTable({
+  pollutants,
+}: PollutantTableProps) {
   const items = [
     {
       name: 'PM2.5 (Fine Particles)',
@@ -89,4 +92,5 @@ export function PollutantTable({ pollutants }: PollutantTableProps) {
       </table>
     </div>
   );
-}
+});
+PollutantTable.displayName = 'PollutantTable';

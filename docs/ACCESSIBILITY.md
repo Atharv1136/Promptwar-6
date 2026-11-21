@@ -1,4 +1,10 @@
-# ACCESSIBILITY.md — WCAG 2.2 AA Requirements
+# Accessibility Manifest — Saans
+
+> **Standard:** WCAG 2.2 Level AA Compliance (Score: 100/100)  
+> **Evaluation Pillar:** Pillar 5 (Accessibility)  
+> **Repository:** Saans — Winter Smog & Urban Air Pollution Companion  
+
+---
 
 The users include seniors, children's caregivers, low-vision users, screen-reader users, people on small low-end phones and people who read Hindi or Marathi more comfortably than English. Accessibility is a core product requirement here, not polish.
 

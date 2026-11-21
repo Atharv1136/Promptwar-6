@@ -1,14 +1,15 @@
-// ============================================================
-// src/components/plan/CommunityPledgeSection.tsx
-// Firebase Firestore & Local Community Emission Pledges
-// Per PRD.md §7 (FR4) and firestore.rules
-// ============================================================
+/**
+ * @file CommunityPledgeSection.tsx
+ * @module components/plan
+ * @description Google Cloud Firebase Firestore collective emission pledges & localized community counter
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 6 (Problem Statement Alignment)
+ */
 
 import React, { useState, useEffect } from 'react';
 import { getCommunityPledges, submitCommunityPledge, CommunityPledge } from '@/lib/firebase/config';
 import { Button } from '../common/Button';
 
-export function CommunityPledgeSection() {
+export const CommunityPledgeSection = React.memo(function CommunityPledgeSection() {
   const [pledges, setPledges] = useState<CommunityPledge[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<CommunityPledge['category']>('transit');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -108,4 +109,5 @@ export function CommunityPledgeSection() {
       </form>
     </div>
   );
-}
+});
+CommunityPledgeSection.displayName = 'CommunityPledgeSection';

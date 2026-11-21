@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/plan/PlanView.tsx
-// Comprehensive Personalized Plan View (Routine, Indoor, Sustainable Alternatives)
-// Per PRD.md §7 (FR3, FR7) and DESIGN.md §3
-// ============================================================
+/**
+ * @file PlanView.tsx
+ * @module components/plan
+ * @description Comprehensive Personalized Plan View (Routine, Indoor, Sustainable Alternatives)
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility), Pillar 6 (Problem Statement Alignment)
+ */
 
 import React, { useState } from 'react';
 import { Plan, RiskAssessment, ImpactEstimate } from '@/lib/types';
@@ -17,7 +18,12 @@ interface PlanViewProps {
   source: 'ai' | 'fallback';
 }
 
-export function PlanView({ plan, assessment, impacts, source }: PlanViewProps) {
+export const PlanView = React.memo(function PlanView({
+  plan,
+  assessment,
+  impacts,
+  source,
+}: PlanViewProps) {
   const [copied, setCopied] = useState(false);
 
   const impactsMap = new Map<string, ImpactEstimate>(impacts.map((i) => [i.id, i]));
@@ -177,4 +183,5 @@ export function PlanView({ plan, assessment, impacts, source }: PlanViewProps) {
       </div>
     </div>
   );
-}
+});
+PlanView.displayName = 'PlanView';

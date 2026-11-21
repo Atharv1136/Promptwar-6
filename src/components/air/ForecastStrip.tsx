@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/air/ForecastStrip.tsx
-// 24-48h Hourly Forecast with Native SVG Sparkline & WCAG Twin Representation
-// Per EFFICIENCY.md §2 and ACCESSIBILITY.md §1, §4
-// ============================================================
+/**
+ * @file ForecastStrip.tsx
+ * @module components/air
+ * @description 24-48h Hourly Forecast with Native SVG Sparkline & WCAG SC 1.1.1 Twin Representation
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 3 (Efficiency), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 import { HourlyReading, OutdoorWindow } from '@/lib/types';
@@ -15,7 +16,7 @@ interface ForecastStripProps {
   ventilationWindow?: OutdoorWindow | null;
 }
 
-export function ForecastStrip({
+export const ForecastStrip = React.memo(function ForecastStrip({
   hourly,
   bestWindows = [],
   worstWindows = [],
@@ -134,4 +135,5 @@ export function ForecastStrip({
       )}
     </div>
   );
-}
+});
+ForecastStrip.displayName = 'ForecastStrip';

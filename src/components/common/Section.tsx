@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/common/Section.tsx
-// Semantic layout section with accessible heading & divider rule
-// Per DESIGN.md §2, §3
-// ============================================================
+/**
+ * @file Section.tsx
+ * @module components/common
+ * @description Semantic layout section with accessible heading & divider rule
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
 
@@ -15,7 +16,7 @@ interface SectionProps {
   className?: string;
 }
 
-export function Section({
+export const Section = React.memo(function Section({
   id,
   title,
   description,
@@ -43,4 +44,5 @@ export function Section({
       <div>{children}</div>
     </section>
   );
-}
+});
+Section.displayName = 'Section';

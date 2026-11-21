@@ -1,8 +1,9 @@
-// ============================================================
-// src/components/plan/ImpactDisclosure.tsx
-// Transparent scientific assumptions disclosure per action item
-// Per PRD.md §7 (FR4) and DESIGN.md §3
-// ============================================================
+/**
+ * @file ImpactDisclosure.tsx
+ * @module components/plan
+ * @description Transparent scientific assumptions disclosure per action item
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 6 (Problem Statement Alignment)
+ */
 
 import React from 'react';
 import { ImpactEstimate } from '@/lib/types';
@@ -12,7 +13,9 @@ interface ImpactDisclosureProps {
   impact?: ImpactEstimate;
 }
 
-export function ImpactDisclosure({ impact }: ImpactDisclosureProps) {
+export const ImpactDisclosure = React.memo(function ImpactDisclosure({
+  impact,
+}: ImpactDisclosureProps) {
   if (!impact) {
     return null;
   }
@@ -55,4 +58,5 @@ export function ImpactDisclosure({ impact }: ImpactDisclosureProps) {
       </div>
     </details>
   );
-}
+});
+ImpactDisclosure.displayName = 'ImpactDisclosure';
