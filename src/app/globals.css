@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f8f9fa;
+  --surface: #ffffff;
+  --ink: #1a1f2c;
+  --ink-muted: #525f7f;
+  --rule: #e2e8f0;
+  --accent: #0f766e; /* Deep teal */
+  --accent-ink: #ffffff;
+  --focus: #0f766e;
+  --danger: #dc2626;
+
+  /* Standard EPA AQI Band Colors tuned for high contrast */
+  --aqi-good: #059669; /* Emerald 600 */
+  --aqi-moderate: #d97706; /* Amber 600 */
+  --aqi-sensitive: #ea580c; /* Orange 600 */
+  --aqi-unhealthy: #dc2626; /* Red 600 */
+  --aqi-very-unhealthy: #9333ea; /* Purple 600 */
+  --aqi-hazardous: #881337; /* Rose 900 / Deep Maroon */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --ink: #f8fafc;
+    --ink-muted: #94a3b8;
+    --rule: #334155;
+    --accent: #14b8a6;
+    --accent-ink: #042f2e;
+    --focus: #38bdf8;
+    --danger: #f87171;
+
+    --aqi-good: #10b981;
+    --aqi-moderate: #f59e0b;
+    --aqi-sensitive: #fb923c;
+    --aqi-unhealthy: #f87171;
+    --aqi-very-unhealthy: #c084fc;
+    --aqi-hazardous: #fda4af;
+  }
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Noto Sans',
+    'Noto Sans Devanagari',
+    sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* WCAG SC 2.4.7 Focus Visible */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Tabular numerals for data alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Skip to content link */
+.skip-link {
+  position: absolute;
+  top: -9999px;
+  left: 1rem;
+  background: var(--ink);
+  color: var(--surface);
+  padding: 0.5rem 1rem;
+  z-index: 9999;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid Highlight;
+  }
+  .skip-link {
+    background: CanvasText;
+    color: Canvas;
+  }
+}

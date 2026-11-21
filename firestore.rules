@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Community emission pledges: readable by all, writable anonymously
+    match /community_pledges/{pledgeId} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().hasAll(['category', 'co2KgSaved', 'pm25GramsSaved', 'timestamp'])
+                    && request.resource.data.co2KgSaved is number
+                    && request.resource.data.pm25GramsSaved is number;
+      allow update, delete: if false; // Immutable audit log
+    }
+
+    // Default deny for all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
