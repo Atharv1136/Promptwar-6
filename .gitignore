@@ -41,3 +41,5 @@ Thumbs.db
 # Temporary / Cache
 .turbo/
 temp_reference_repo/
+
+.vercel

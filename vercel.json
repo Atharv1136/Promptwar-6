@@ -1,0 +1,10 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm ci",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "regions": ["bom1"],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

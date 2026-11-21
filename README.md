@@ -9,9 +9,14 @@
   <img src="https://img.shields.io/badge/TypeScript-Strict-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Google_Gemini-AI-8E75B2?style=for-the-badge&logo=google" alt="Gemini AI" />
   <img src="https://img.shields.io/badge/Firebase-Firestore-FFCA28?style=for-the-badge&logo=firebase" alt="Firebase" />
+  <img src="https://img.shields.io/badge/Vercel-Deployed-000000?style=for-the-badge&logo=vercel" alt="Vercel Deployed" />
   <img src="https://img.shields.io/badge/WCAG-2.2_AA-21A85A?style=for-the-badge" alt="WCAG 2.2 AA" />
   <img src="https://img.shields.io/badge/Tests-88_Passing-success?style=for-the-badge" alt="88 Tests" />
   <img src="https://img.shields.io/badge/Coverage-94.65%25-brightgreen?style=for-the-badge" alt="Coverage" />
+</p>
+
+<p align="center">
+  🌐 <strong>Live Production URL:</strong> <a href="https://saans-app-two.vercel.app">https://saans-app-two.vercel.app</a>
 </p>
 
 ---
