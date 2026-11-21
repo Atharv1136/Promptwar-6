@@ -1,4 +1,5 @@
 import { Profile, AirSnapshot } from '@/lib/types';
+import { SCENARIOS_EXTENDED } from './scenariosExtended';
 
 export interface GoldenScenario {
   id: string;
@@ -14,7 +15,7 @@ export interface GoldenScenario {
   };
 }
 
-export const GOLDEN_SCENARIOS: GoldenScenario[] = [
+const BASE_SCENARIOS: GoldenScenario[] = [
   {
     id: 'pune-moderate-wfh',
     name: 'Pune Moderate Work-From-Home',
@@ -112,138 +113,6 @@ export const GOLDEN_SCENARIOS: GoldenScenario[] = [
       ventilationPossible: false,
     },
   },
-  {
-    id: 'lucknow-unhealthy-afternoon-clean',
-    name: 'Lucknow Smog Inversion Clearing',
-    description: 'Lucknow, AQI 180 now, forecast improving to 90 by 14:00 -> Unhealthy, ventilation window afternoon.',
-    profile: {
-      location: { name: 'Lucknow, Uttar Pradesh', lat: 26.8467, lon: 80.9462 },
-      household: {
-        adults: 3,
-        children: { under5: 0, age5to12: 1, age13to17: 0 },
-        seniors: 0,
-        hasSensitiveHealthMember: false,
-      },
-      lifestyle: { commute: 'car', commuteDistance: 'gt10km' },
-      home: {
-        type: 'apartment',
-        sealing: 'average',
-        cooking: 'lpg_png',
-        heating: 'electric',
-        purifier: 'hepa',
-      },
-      budget: 'flexible',
-      language: 'en',
-    },
-    snapshot: {
-      aqi: 180,
-      band: 'Unhealthy',
-      dominantPollutant: 'pm25',
-      pollutants: { pm25: 112, pm10: 180, no2: 40, o3: 25, so2: 10, co: 1.1 },
-      hourly: [
-        { time: '2026-11-21T08:00', aqi: 180, pm25: 112, band: 'Unhealthy' },
-        { time: '2026-11-21T13:00', aqi: 95, pm25: 33, band: 'Moderate' },
-        { time: '2026-11-21T14:00', aqi: 85, pm25: 28, band: 'Moderate' },
-        { time: '2026-11-21T19:00', aqi: 170, pm25: 95, band: 'Unhealthy' },
-      ],
-      timestamp: '2026-11-21T08:00:00Z',
-      source: 'Open-Meteo',
-      isManual: false,
-      forecastUnavailable: false,
-    },
-    expected: {
-      tier: 'Unhealthy',
-      isEscalated: false,
-      hasRestrictions: ['no_outdoor_exercise', 'mask_outdoors', 'school_outdoor_activities_off'],
-      ventilationPossible: true,
-    },
-  },
-  {
-    id: 'senior-sensitive-escalation',
-    name: 'Senior & Asthma Escalation',
-    description: 'Senior + sensitive member, AQI 120 -> escalated to Unhealthy tier, mask guidance active.',
-    profile: {
-      location: { name: 'Kolkata, West Bengal', lat: 22.5726, lon: 88.3639 },
-      household: {
-        adults: 1,
-        children: { under5: 0, age5to12: 0, age13to17: 0 },
-        seniors: 1,
-        hasSensitiveHealthMember: true,
-      },
-      lifestyle: { commute: 'walk', commuteDistance: 'lt3km' },
-      home: {
-        type: 'apartment',
-        sealing: 'average',
-        cooking: 'lpg_png',
-        heating: 'none',
-        purifier: 'none',
-      },
-      budget: 'moderate',
-      language: 'en',
-    },
-    snapshot: {
-      aqi: 120,
-      band: 'UnhealthySensitive',
-      dominantPollutant: 'pm25',
-      pollutants: { pm25: 43, pm10: 80, no2: 30, o3: 20, so2: 8, co: 0.8 },
-      hourly: [
-        { time: '2026-11-21T08:00', aqi: 120, pm25: 43, band: 'UnhealthySensitive' },
-        { time: '2026-11-21T14:00', aqi: 115, pm25: 41, band: 'UnhealthySensitive' },
-      ],
-      timestamp: '2026-11-21T08:00:00Z',
-      source: 'Open-Meteo',
-      isManual: false,
-      forecastUnavailable: false,
-    },
-    expected: {
-      tier: 'Unhealthy', // Escalated from UnhealthySensitive
-      isEscalated: true,
-      hasRestrictions: ['no_outdoor_exercise', 'mask_outdoors'],
-      ventilationPossible: true,
-    },
-  },
-  {
-    id: 'clean-day-encouragement',
-    name: 'Clean Day Good AQI',
-    description: 'Clean day AQI 30 -> Good, no restrictions, ventilation open.',
-    profile: {
-      location: { name: 'Bengaluru, Karnataka', lat: 12.9716, lon: 77.5946 },
-      household: {
-        adults: 2,
-        children: { under5: 0, age5to12: 0, age13to17: 0 },
-        seniors: 0,
-        hasSensitiveHealthMember: false,
-      },
-      lifestyle: { commute: 'cycle', commuteDistance: '3to10km' },
-      home: {
-        type: 'apartment',
-        sealing: 'well_sealed',
-        cooking: 'electric',
-        heating: 'none',
-        purifier: 'none',
-      },
-      budget: 'moderate',
-      language: 'en',
-    },
-    snapshot: {
-      aqi: 30,
-      band: 'Good',
-      dominantPollutant: 'pm25',
-      pollutants: { pm25: 7, pm10: 18, no2: 12, o3: 25, so2: 3, co: 0.3 },
-      hourly: [
-        { time: '2026-11-21T08:00', aqi: 30, pm25: 7, band: 'Good' },
-        { time: '2026-11-21T14:00', aqi: 25, pm25: 6, band: 'Good' },
-      ],
-      timestamp: '2026-11-21T08:00:00Z',
-      source: 'Open-Meteo',
-      isManual: false,
-      forecastUnavailable: false,
-    },
-    expected: {
-      tier: 'Good',
-      isEscalated: false,
-      hasRestrictions: [],
-      ventilationPossible: true,
-    },
-  },
 ];
+
+export const GOLDEN_SCENARIOS: GoldenScenario[] = [...BASE_SCENARIOS, ...SCENARIOS_EXTENDED];

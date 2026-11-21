@@ -1,7 +1,7 @@
 // ============================================================
 // src/lib/ai/fallback.ts
 // Deterministic 3-language rule-based fallback plan generator
-// Per PRD.md §7 (FR3, FR6) and ARCHITECTURE.md §5
+// Per PRD.md §7 (FR3, FR6) and ARCHITECTURE.md §5 (<= 150 lines)
 // ============================================================
 
 import { Profile, RiskAssessment, ImpactEstimate, Plan, ActionItem } from '@/lib/types';
@@ -14,28 +14,24 @@ export function buildFallbackPlan(
 ): Plan {
   const validImpactIds = new Set(impacts.map((i) => i.id));
   const fallbackImpactId = impacts[0]?.id || 'exp-window-sealing';
-
   const isHindi = language === 'hi';
   const isMarathi = language === 'mr';
 
-  // 1. Localized Summaries & Top Actions
-  let summary = `Air quality is ${assessment.tier} (AQI ${assessment.tier}). Prioritize indoor exposure reduction and schedule essential outdoor trips during optimal midday hours.`;
-  let safetyNote =
-    'General environmental guidance only; not medical advice. Seek clinical attention for symptoms such as chest tightness or persistent breathlessness.';
+  const summary = isHindi
+    ? `आज वायु गुणवत्ता ${assessment.tier} श्रेणी में है। घर के अंदर सुरक्षित रहें और केवल दोपहर के सुरक्षित समय बाहर निकलें।`
+    : isMarathi
+      ? `आज हवेची गुणवत्ता ${assessment.tier} स्तरावर आहे. घरातील हवा स्वच्छ ठेवा आणि फक्त दुपारच्या वेळेतच बाहेर पडा.`
+      : `Air quality is ${assessment.tier} (AQI ${assessment.tier}). Prioritize indoor exposure reduction and schedule essential trips during optimal midday hours.`;
 
-  if (isHindi) {
-    summary = `आज वायु गुणवत्ता ${assessment.tier} श्रेणी में है। घर के अंदर सुरक्षित रहें और आवश्यक होने पर केवल दोपहर के समय बाहर निकलें।`;
-    safetyNote =
-      'यह केवल सामान्य मार्गदर्शन है, चिकित्सकीय परामर्श नहीं। सांस लेने में कठिनाई होने पर तुरंत डॉक्टर से संपर्क करें।';
-  } else if (isMarathi) {
-    summary = `आज हवेची गुणवत्ता ${assessment.tier} स्तरावर आहे. घरातील हवा स्वच्छ ठेवा आणि फक्त दुपारच्या सुरक्षित वेळेतच बाहेर पडा.`;
-    safetyNote =
-      'हे केवळ सामान्य मार्गदर्शन आहे, वैद्यकीय सल्ला नाही. श्वास घेण्यास त्रास झाल्यास डॉक्टरांचा सल्ला घ्या.';
-  }
+  const safetyNote = isHindi
+    ? 'यह केवल सामान्य मार्गदर्शन है, चिकित्सकीय परामर्श नहीं। सांस लेने में कठिनाई होने पर डॉक्टर से संपर्क करें।'
+    : isMarathi
+      ? 'हे केवळ सामान्य मार्गदर्शन आहे, वैद्यकीय सल्ला नाही. श्वास घेण्यास त्रास झाल्यास डॉक्टरांचा सल्ला घ्या.'
+      : 'General environmental guidance only; not medical advice. Seek clinical attention for symptoms such as chest tightness or persistent breathlessness.';
 
-  // 2. Pre-authored High-Quality Actions covering all 3 categories
+  const isExerciseRestricted = assessment.restrictions.includes('no_outdoor_exercise');
+
   const actions: ActionItem[] = [
-    // Routine 1: Commute
     {
       title: isHindi
         ? 'सुबह और शाम की यात्रा में N95 मास्क पहनें'
@@ -50,9 +46,8 @@ export function buildFallbackPlan(
       appliesTo: ['everyone'],
       timeOfDay: 'morning',
     },
-    // Routine 2: Outdoor Physical Activity
     {
-      title: assessment.restrictions.includes('no_outdoor_exercise')
+      title: isExerciseRestricted
         ? isHindi
           ? 'घर के अंदर योग और हल्का व्यायाम करें (बाहर दौड़ने से बचें)'
           : isMarathi
@@ -64,7 +59,7 @@ export function buildFallbackPlan(
             ? 'दुपारी स्वच्छ हवेच्या वेळेत चालायला जा'
             : 'Schedule Outdoor Walks in the Cleansing Afternoon Window',
       category: 'routine',
-      why: assessment.restrictions.includes('no_outdoor_exercise')
+      why: isExerciseRestricted
         ? 'Deep breathing during strenuous outdoor exercise deposits toxic fine particles deep into alveolar lung tissues.'
         : 'Solar heating promotes convective mixing, temporarily dispersing ground-level smog between 13:00 and 16:00.',
       impactRef: fallbackImpactId,
@@ -73,7 +68,6 @@ export function buildFallbackPlan(
       appliesTo: ['everyone'],
       timeOfDay: 'afternoon',
     },
-    // Routine 3: Evening Routine
     {
       title: isHindi
         ? 'शाम को खिड़कियां बंद रखें और घर में गीला पोछा लगाएं'
@@ -88,7 +82,6 @@ export function buildFallbackPlan(
       appliesTo: ['everyone'],
       timeOfDay: 'evening',
     },
-    // Indoor 1: Window Sealing
     {
       title: isHindi
         ? 'खिड़कियों और दरवाजों की दरारों को सील करें'
@@ -103,70 +96,46 @@ export function buildFallbackPlan(
       appliesTo: ['everyone'],
       timeOfDay: 'morning',
     },
-    // Indoor 2: Ventilation Timing
     {
       title: assessment.ventilationWindow
         ? isHindi
           ? `दोपहर ${assessment.ventilationWindow.startHour}:00 से ${assessment.ventilationWindow.endHour}:00 के बीच घर में ताजी हवा आने दें`
           : isMarathi
-            ? `दुपारी ${assessment.ventilationWindow.startHour}:00 ते ${assessment.ventilationWindow.endHour}:00 दरम्यान खिडक्या उघडा`
-            : `Open Windows for Cross-Ventilation Specifically from ${assessment.ventilationWindow.startHour}:00 to ${assessment.ventilationWindow.endHour}:00`
+            ? `दुपारी ${assessment.ventilationWindow.startHour}:00 ते ${assessment.ventilationWindow.endHour}:00 दरम्यान घरातील हवा खेळती ठेवा`
+            : `Cross-Ventilate Living Spaces Between ${assessment.ventilationWindow.startHour}:00 and ${assessment.ventilationWindow.endHour}:00`
         : isHindi
-          ? 'आज पूरा दिन खिड़कियां बंद रखें (हवा खतरनाक है)'
+          ? 'दिन भर खिड़कियां बंद रखें और इनडोर प्यूरिफायर चलाएं'
           : isMarathi
-            ? 'आज दिवसभर खिडक्या बंदच ठेवा'
-            : 'Keep All Windows Closed Throughout Today (Severe Inversion)',
+            ? 'दिवसभर खिडक्या बंद ठेवा आणि एअर प्युरिफायर चालू ठेवा'
+            : 'Keep Windows Closed Throughout the Day; Avoid Air Ingress',
       category: 'indoor',
       why: assessment.ventilationWindow
-        ? 'Brief 30-minute cross ventilation during solar peak replaces indoor CO2 without introducing dangerous PM2.5 concentrations.'
-        : 'Ambient PM2.5 remains elevated above hazardous thresholds all day; opening windows will degrade indoor air.',
-      impactRef: fallbackImpactId,
+        ? 'Optimal solar mixing during midday hours creates a transient drop in ambient particulate concentration.'
+        : 'Severe nocturnal and inversion smog persists continuously; outdoor air ingress elevates internal exposure.',
+      impactRef: validImpactIds.has('exp-window-ventilation')
+        ? 'exp-window-ventilation'
+        : fallbackImpactId,
       effort: 'low',
       cost: 'free',
       appliesTo: ['everyone'],
       timeOfDay: 'afternoon',
     },
-    // Indoor 3: Filter Care or DIY Box Fan
     {
       title:
-        profile.home.purifier === 'hepa'
-          ? 'Pre-filter Cleaning & Central Purifier Placement'
-          : 'Corsi-Rosenthal DIY Box-Fan Filter Setup',
-      category: 'indoor',
-      why:
-        profile.home.purifier === 'hepa'
-          ? 'Vacuuming pre-filters bi-weekly maintains design Clean Air Delivery Rate (CADR) and extends main HEPA lifespan.'
-          : 'A certified box fan taped to MERV-13 furnace filters creates an affordable high-CADR particle scrubber. Safety notice: Never leave unattended and keep away from water.',
-      impactRef: validImpactIds.has('exp-hepa-indoor')
-        ? 'exp-hepa-indoor'
-        : validImpactIds.has('exp-diy-filter')
-          ? 'exp-diy-filter'
-          : fallbackImpactId,
-      effort: 'medium',
-      cost: profile.home.purifier === 'hepa' ? 'free' : 'low',
-      appliesTo: ['everyone'],
-      timeOfDay: 'any',
-    },
-    // Alternative 1: Transit Modal Shift
-    {
-      title: isHindi
-        ? 'निजी वाहन के बजाय सार्वजनिक मेट्रो या इलेक्ट्रिक बस का उपयोग करें'
-        : isMarathi
-          ? 'खाजगी वाहनांऐवजी मेट्रो किंवा बसने प्रवास करा'
-          : 'Shift Commute from Private Vehicle to Electric Metro or Clean Bus',
+        profile.lifestyle.commute === 'car'
+          ? 'Shift 2 Workdays to Metro or Public Transit'
+          : 'Maintain Low-Emission Active Commute with HEPA Filter in Car/Cabin',
       category: 'alternative',
-      why: 'Public transit corridors significantly reduce per-capita emissions and route commuters away from heavy road-level diesel exhaust canyons.',
-      impactRef: validImpactIds.has('em-commute-car-swap')
-        ? 'em-commute-car-swap'
-        : validImpactIds.has('em-commute-bike-swap')
-          ? 'em-commute-bike-swap'
-          : fallbackImpactId,
+      why:
+        profile.lifestyle.commute === 'car'
+          ? 'Personal car usage contributes substantial tailpipe NOx and particulate mass to urban street canyons.'
+          : 'Active and shared transit reduces urban tailpipe emissions while proper cabin filtration protects riders.',
+      impactRef: validImpactIds.has('em-car-to-transit') ? 'em-car-to-transit' : fallbackImpactId,
       effort: 'medium',
       cost: 'low',
-      appliesTo: ['adults'],
+      appliesTo: ['everyone'],
       timeOfDay: 'morning',
     },
-    // Alternative 2: Clean Cooking / Heating Alternative
     {
       title:
         profile.home.cooking === 'biomass' || profile.home.heating === 'solid_fuel'

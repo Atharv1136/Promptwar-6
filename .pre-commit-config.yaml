@@ -1,0 +1,31 @@
+# See https://pre-commit.com for more information
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+
+  - repo: local
+    hooks:
+      - id: prettier-check
+        name: Prettier Formatting Check
+        entry: npx prettier --check "src/**/*.{ts,tsx,css,json}"
+        language: system
+        pass_filenames: false
+
+      - id: typecheck
+        name: TypeScript Strict Typecheck
+        entry: npx tsc --noEmit
+        language: system
+        pass_filenames: false
+
+      - id: test-run
+        name: Vitest Test Suite Run
+        entry: npm run test:run
+        language: system
+        pass_filenames: false

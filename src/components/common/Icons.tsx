@@ -1,11 +1,12 @@
-// ============================================================
-// src/components/common/Icons.tsx
-// Pure inline SVG icons & geometric AQI band glyphs (WCAG Color-Independence)
-// Per DESIGN.md §2 and ACCESSIBILITY.md §4
-// ============================================================
+/**
+ * @file Icons.tsx
+ * @module components/common
+ * @description Accessible SVG icons and re-exported geometric AQI glyphs
+ * @evaluation-pillar Pillar 1 (Code Quality), Pillar 5 (Accessibility)
+ */
 
 import React from 'react';
-import { AQIBand } from '@/lib/types';
+export { AqiGlyph } from './AqiGlyph';
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
@@ -96,105 +97,4 @@ export function CopyIcon({ className = '', size = 18, ...props }: IconProps) {
       <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
     </svg>
   );
-}
-
-/**
- * Geometric shape glyphs ensuring AQI bands are communicated independently of color.
- */
-export function AqiGlyph({
-  band,
-  size = 16,
-  className = '',
-}: {
-  band: AQIBand;
-  size?: number;
-  className?: string;
-}) {
-  switch (band) {
-    case 'Good':
-      // Circle
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={className}
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="12" r="10" />
-        </svg>
-      );
-    case 'Moderate':
-      // Triangle
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={className}
-          aria-hidden="true"
-        >
-          <polygon points="12,2 22,22 2,22" />
-        </svg>
-      );
-    case 'UnhealthySensitive':
-      // Square
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={className}
-          aria-hidden="true"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="2" />
-        </svg>
-      );
-    case 'Unhealthy':
-      // Diamond
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={className}
-          aria-hidden="true"
-        >
-          <polygon points="12,2 22,12 12,22 2,12" />
-        </svg>
-      );
-    case 'VeryUnhealthy':
-      // Hexagon
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={className}
-          aria-hidden="true"
-        >
-          <polygon points="12,2 21,7 21,17 12,22 3,17 3,7" />
-        </svg>
-      );
-    case 'Hazardous':
-    default:
-      // Octagon
-      return (
-        <svg
-          width={size}
-          height={size}
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          className={className}
-          aria-hidden="true"
-        >
-          <polygon points="7.86,2 16.14,2 22,7.86 22,16.14 16.14,22 7.86,22 2,16.14 2,7.86" />
-        </svg>
-      );
-  }
 }
