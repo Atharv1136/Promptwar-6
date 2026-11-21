@@ -7,7 +7,8 @@ Every dependency in `package.json` is strictly justified per `AGENT.md §4` and 
 | `next` | ^15.1.7 | Full-stack React framework providing App Router, SSR, route handlers, and streaming. |
 | `react` | ^19.0.0 | Core UI rendering library with modern Concurrent Features and Actions. |
 | `react-dom` | ^19.0.0 | DOM bindings and hydration engine for React 19. |
-| `@google/genai` | ^0.1.2 | Official Google GenAI SDK for Gemini models with structured JSON schema outputs. |
+| `@google/genai` | ^3.6.1 | Official Google GenAI SDK for Gemini 2.5 Flash with structured JSON schema outputs. |
+| `firebase` | ^11.3.1 | Google Cloud Firebase Firestore for community collective smog pledges and impact aggregation. |
 | `zod` | ^3.24.2 | Zero-overhead runtime validation for API contracts, env variables, and model output. |
 | `server-only` | ^0.0.1 | Compiler-level guard ensuring secret-bearing and rate-limiting modules never bundle to client. |
 
@@ -26,3 +27,18 @@ Every dependency in `package.json` is strictly justified per `AGENT.md §4` and 
 | `jsdom` | ^26.0.0 | Headless browser DOM environment for executing component and accessibility tests. |
 | `eslint` & `eslint-config-next` | Latest | Next.js and React linting rules preventing common pitfalls and memory leaks. |
 | `prettier` | ^3.5.2 | Automated code formatting ensuring strict consistency across the codebase. |
+
+---
+
+# Supply Chain & Security Advisory Assessment (`npm audit --omit=dev`)
+
+Audit executed on 2026-11-21. Evaluation of reported advisories:
+1. **Zod (GHSA-mrhx-c7xc-m3w5 - High)**:
+   - *Impact*: Memory exhaustion during parsing of deeply oversized collections.
+   - *Mitigation*: Saans enforces an aggressive 8 KB body cap (`readJsonWithLimit(req, 8192)`) at the HTTP transport layer *before* any payload touches Zod parsers. Oversized collections are rejected immediately with HTTP 413, neutralizing memory exhaustion risks completely.
+2. **PostCSS (GHSA-6g55-p6wh-862q, GHSA-fxqj-rqcc-2cmp - High)**:
+   - *Impact*: Source map traversal during build-time CSS compilation.
+   - *Mitigation*: PostCSS is strictly executed during `npm run build` within our isolated CI environment. No user-controlled CSS is ever compiled or processed at runtime.
+3. **@grpc/grpc-js in Firebase (GHSA-m9gg-hp2v-232j, GHSA-f596-whhp-79r4 - High)**:
+   - *Impact*: Server-side method handler certificate verification and error transmission in gRPC servers.
+   - *Mitigation*: Saans uses Firebase exclusively as a browser/client Firestore WebChannel consumer over HTTPS WebSocket connections (`src/lib/firebase/config.ts`), not as an exposed backend gRPC server.
